@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tencoding.cuggishop.repository.interfaces.OfflineStoreRepository"> 
+
+	<insert id= "insert">
+		INSERT INTO offline_store_tb(store_name, store_number,store_address,store_address_detail, created_at)
+		values(#{storeName},#{storeNumber},#{storeAddress},#{storeAddressDetail},now());
+	</insert>
+	
+	<update id="updateById">
+		UPDATE offline_store_tb SET store_name = #{storeName},
+		store_number = #{storeNumber}, store_address = #{storeAddress}, store_address_detail= #{storeAddressDetail}
+		WHERE id = #{id};
+	</update>
+	
+	<delete id="deleteById">
+		DELETE FROM offline_store_tb WHERE id = #{id};
+	</delete>
+	
+	<select id="findById" resultType = "com.tencoding.cuggishop.repository.model.OfflineStore">
+		SELECT * FROM offline_store_tb WHERE id = #{id};
+	</select>
+	
+	<select id="findByAll" resultType = "com.tencoding.cuggishop.repository.model.OfflineStore">
+		SELECT * FROM offline_store_tb;
+	</select>
+	
+	<select  id="findPaging" resultType = "com.tencoding.cuggishop.dto.response.PagingResponseDto">
+		SELECT totalCount, totalPage, currentPage,	
+				CASE
+					WHEN currentPage = 1
+					THEN 1
+					ELSE 0 
+				END AS isFirst,
+			   CASE
+					WHEN currentPage = totalPage
+					THEN 1
+					ELSE 0 
+				END AS isLast
+			FROM(
+				SELECT count(*) totalCount, ceil(count(*)/10) totalPage,#{page} currentPage, 0 isFirst, 0 isLast
+				FROM offline_store_tb
+				<if test="type == 'storeAddress' and keyword != null">
+					WHERE store_address like CONCAT('%',#{keyword},'%') 
+				</if>
+				<if test="type == 'storeName' and keyword != null" >
+					WHERE store_name like CONCAT('%',#{keyword},'%')
+				</if>
+			) ost;
+	
+	</select>
+	
+	<select id="findByKeywordAndCurrentPage" resultType = "com.tencoding.cuggishop.repository.model.OfflineStore">
+		SELECT * FROM offline_store_tb
+				<if test="type == 'storeAddress' and keyword != null">
+					WHERE store_address like CONCAT('%',#{keyword},'%')
+				</if>
+				<if test="type == 'storeName' and keyword != null" >
+					WHERE store_name like CONCAT('%',#{keyword},'%')
+				</if>
+		ORDER BY id DESC
+		LIMIT #{startNum}, 10;
+	</select>
+	
+	<select id="findLocator" resultType = "String">
+		SELECT substring(store_address, 1, locate(' ', store_address)-1) as location FROM offline_store_tb GROUP BY location ORDER BY count(*) desc;
+	</select>
+	
+	<select id="findByAddress" resultType = "com.tencoding.cuggishop.repository.model.OfflineStore">
+		SELECT * FROM offline_store_tb 
+				<if test="location != null" >
+					WHERE store_address like CONCAT('%',#{location},'%');
+				</if>
+	</select>
+	
+</mapper>

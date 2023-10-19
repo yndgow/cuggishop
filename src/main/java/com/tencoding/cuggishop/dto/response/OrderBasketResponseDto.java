@@ -1,0 +1,17 @@
+package com.tencoding.cuggishop.dto.response;
+
+import lombok.Data;
+
+@Data
+public class OrderBasketResponseDto {
+
+	int id;
+	String image;
+	String productName;
+	String secondCategoryName;
+	int quantity;
+	int price;
+	int orderId;
+	int productId;
+	int isThumbnail;
+}

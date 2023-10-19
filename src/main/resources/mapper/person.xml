@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tencoding.cuggishop.repository.interfaces.PersonRepository"> 
+
+	<insert id= "insert">
+		INSERT INTO person_tb(name , address, address_detail, email , phone_number, birthday, user_id, created_at)
+		values(#{name},#{address},#{addressDetail},#{email},#{phoneNumber},#{birthday},#{userId},now());
+	</insert>
+	
+	<update id="updateById">
+		UPDATE person_tb SET name = #{name},
+		address = #{address}, address_detail = #{addressDetail}, email = #{email}, phone_number = #{phoneNumber},
+		birthday = #{birthday}, user_id = #{userId}
+		WHERE id = #{id};
+	</update>
+	
+	<delete id="deleteById">
+		DELETE FROM person_tb WHERE id = #{id};
+	</delete>
+	
+	<select id="findById" resultType = "com.tencoding.cuggishop.repository.model.Person">
+		SELECT * FROM person_tb WHERE id = #{id};
+	</select>
+	
+	<select id="findByAll" resultType = "com.tencoding.cuggishop.repository.model.Person">
+		SELECT * FROM person_tb;
+	</select>
+		
+	<select id="findByUserId" resultType = "com.tencoding.cuggishop.repository.model.Person">
+		SELECT * FROM person_tb WHERE user_id = #{userId};
+	</select>
+	
+	<update id="updateByUserId">
+		UPDATE person_tb SET name = #{name},
+		address = #{address}, address_detail = #{addressDetail}, email = #{email}, phone_number = #{phoneNumber},
+		birthday = #{birthday}
+		WHERE user_id = #{userId};
+	</update>
+	
+	<delete id="deleteByUserId">
+		DELETE FROM person_tb WHERE user_id = #{userId};
+	</delete>
+</mapper>

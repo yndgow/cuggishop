@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tencoding.cuggishop.repository.interfaces.QnaRepository"> 
+
+	<insert id= "insert">
+		INSERT INTO qna_tb(title, content, user_id, state, created_at)
+		values(#{title},#{content},#{userId},'확인중',now());
+	</insert>
+	
+	<update id="updateById">
+		UPDATE qna_tb SET title = #{title},
+		content = #{content}
+		WHERE id = #{id};
+	</update>
+	
+	<delete id="deleteById">
+		DELETE FROM qna_tb WHERE id = #{id};
+	</delete>
+	
+	<select id="findById" resultType = "com.tencoding.cuggishop.dto.response.QnaAnswerResponseDto">
+		select qt.id, qt.title, qt.content, qat.content qat_content
+		from qna_tb qt
+		left join qna_answer_tb qat
+		on qt.id = qat.qna_id
+		where qt.id = #{id};
+	</select>
+	
+	<select id="findByAll" resultType = "com.tencoding.cuggishop.repository.model.Qna">
+		SELECT * FROM qna_tb order by id desc;
+	</select>
+	
+	<insert id="insertAnswer">
+		insert into qna_answer_tb (qna_id, title, content, created_at)
+		values(#{qnaId},#{title},#{content},now())
+	</insert>
+	
+	<update id="updateByQnaid">
+		update qna_tb set state = '답변 완료' where id = ${qnaId};
+	</update>
+	
+	<select  id="findPaging" resultType = "com.tencoding.cuggishop.dto.response.PagingResponseDto">
+		SELECT totalCount, totalPage, currentPage,	
+				CASE
+					WHEN currentPage = 1
+					THEN 1
+					ELSE 0 
+				END AS isFirst,
+			   CASE
+					WHEN currentPage = totalPage
+					THEN 1
+					ELSE 0 
+				END AS isLast
+			FROM(
+				SELECT count(*) totalCount, ceil(count(*)/10) totalPage,#{page} currentPage, 0 isFirst, 0 isLast
+				FROM qna_tb qt
+				left join person_tb p
+				on qt.user_id = p.user_id
+				WHERE 1=1
+				<if test="type == 'name' and keyword != null">
+					and p.name like CONCAT('%',#{keyword},'%')
+				</if>
+				<if test="status != null and keyword != null">
+			 		and qt.state like CONCAT('%',#{status},'%')
+				</if>
+			) ost;
+	
+	</select>
+	
+	<select id="findByKeywordAndCurrentPage" resultType = "com.tencoding.cuggishop.dto.response.QnaListResponseDto">
+		select qt.id, qt.user_id, qt.title, qt.state, qt.created_at, p.name
+		from qna_tb qt
+		left join person_tb p
+		on qt.user_id = p.user_id
+		WHERE 1=1
+		<if test="type == 'name' and keyword != null">
+			 and p.name like CONCAT('%',#{keyword},'%')
+		</if>
+		<if test="status != null and keyword != null">
+			 and qt.state like CONCAT('%',#{status},'%')
+		</if>
+		ORDER BY id DESC
+		LIMIT #{startNum}, 10;
+	</select>
+	
+	<select id="findByQnaId" resultType = "com.tencoding.cuggishop.dto.response.QnaAnswerMailResponseDto">
+		select p.email, qt.title, qt.content, qat.content qatContent
+		from person_tb p
+		left join qna_tb qt
+		on p.user_id = qt.user_id
+		left join qna_answer_tb qat
+		on qt.id = qat.qna_id
+		where qat.qna_id = #{qnaId};
+	</select>
+</mapper>

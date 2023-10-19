@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tencoding.cuggishop.repository.interfaces.SecondCategoryRepository"> 
+
+	<insert id= "insert">
+		INSERT INTO second_category_tb(second_category_name, category_id, created_at)
+		values(#{secondCategoryName},#{categoryId},now());
+	</insert>
+	
+	<update id="updateById">
+		UPDATE second_category_tb SET second_category_name = #{secondCategoryName},
+		category_id = #{categoryId}
+		WHERE id = #{id};
+	</update>
+	
+	<delete id="deleteById">
+		DELETE FROM second_category_tb WHERE id = #{id};
+	</delete>
+	
+	<select id="findById" resultType = "com.tencoding.cuggishop.repository.model.SecondCategory">
+		SELECT * FROM second_category_tb WHERE id = #{id};
+	</select>
+	
+	<select id="findByAll" resultType = "com.tencoding.cuggishop.repository.model.SecondCategory">
+		SELECT * FROM second_category_tb;
+	</select>
+	
+	<select id="findByFirstCategoryId" resultType = "com.tencoding.cuggishop.repository.model.SecondCategory">
+		SELECT * 
+		FROM second_category_tb sct 
+		WHERE sct.first_category_id = #{firstCategoryId};
+	</select>	
+	
+	<select id="findByMenu" resultType = "com.tencoding.cuggishop.dto.response.CategoryResponseDto">
+		select  sct.id, sct.first_category_id,sct.second_category_name, fct.first_category_name
+		from second_category_tb sct
+		left join first_category_tb fct
+		on fct.id = sct.first_category_id
+	</select>	
+</mapper>

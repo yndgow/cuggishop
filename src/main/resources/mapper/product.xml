@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tencoding.cuggishop.repository.interfaces.ProductRepository"> 
+
+	<insert id= "insert" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO product_tb(second_category_id , product_name, price, product_feature, quantity, created_at)
+		values(#{secondCategoryId},#{productName},#{price},#{productFeature},#{quantity},now());
+	</insert>
+	
+	<update id="updateById">
+		UPDATE product_tb SET second_category_id = #{secondCategoryId},
+		product_name = #{productName}, price = #{price},
+		product_feature = #{productFeature}, quantity = #{quantity},
+		created_at = now() 
+		WHERE id = #{id};
+	</update>
+	
+	<delete id="deleteById">
+		DELETE FROM product_tb WHERE id = #{id};
+	</delete>
+	
+	<select id="findById" resultType = "com.tencoding.cuggishop.repository.model.Product">
+		SELECT * FROM product_tb WHERE id = #{id};
+	</select>
+	
+	<select id="findByAll" resultType = "com.tencoding.cuggishop.repository.model.Product">
+		SELECT * FROM product_tb;
+	</select>
+	
+	<select id="findByAllForCateOrderByDesc" resultType = "com.tencoding.cuggishop.dto.response.ProductListResponseDto">
+		select pt.id productId, pt.second_category_id secondCategoryId,	pt.product_name productName, 
+		pt.price, pt.created_at createdAt, pit.image, sct.second_category_name secondCategoryName, 
+		fct.id firstCategoryId, fct.first_category_name firstCategoryName 
+		from product_tb pt
+		join product_image_tb pit 
+		on pt.id = pit.product_id 
+		JOIN second_category_tb sct 
+		ON pt.second_category_id = sct.id
+		JOIN first_category_tb fct 
+		ON sct.first_category_id = fct.id
+		<where>
+			pit.is_thumbnail = 1
+			<if test="firstCategoryId != null">
+				and first_category_id = #{firstCategoryId}
+			</if> 
+			<if test="secondCategoryId != null">
+				and second_category_id = #{secondCategoryId}
+			</if>
+			<if test="searchData != null">
+				and pt.product_name like concat('%', #{searchData}, '%')
+			</if>
+		</where> 
+		  
+		<choose>
+			<when test="filter == 'priceDESC'">
+				order by(pt.price) DESC,
+			</when>
+			<when test="filter == 'priceASC'">
+				order by(pt.price) ASC,
+			</when>
+			<otherwise>
+				order by(pt.created_at) DESC,
+			</otherwise>
+		</choose>
+		(pit.id) ASC;
+		
+	</select>
+	
+	<select id="findByIdForCate" resultType = "com.tencoding.cuggishop.dto.response.ProductResponseDto">
+		select pt.* , pit.image , sct.second_category_name 
+		from product_tb pt 
+		join product_image_tb pit 
+		on pt.id = pit.product_id 
+		join second_category_tb sct 
+		on pt.second_category_id = sct.id
+		where pt.id = #{productId} and pit.is_thumbnail = 0
+		order by (pit.id) ASC;
+	</select>
+	
+	<select id="findByFirstCategoryId" resultType = "com.tencoding.cuggishop.dto.response.ProductListResponseDto">	
+		SELECT * FROM product_tb pt
+		JOIN product_image_tb pit 
+		ON pt.id = pit.product_id 
+		WHERE pit.is_thumbnail = 1
+		AND pt.second_category_id 
+		IN (
+			SELECT sct.id FROM second_category_tb sct 
+			WHERE sct.category_id = #{firstCategoryId});
+	</select>
+	
+	<!-- admin -->
+	<select  id="findPaging" resultType = "com.tencoding.cuggishop.dto.response.PagingResponseDto">
+		SELECT totalCount, totalPage, currentPage,	
+				CASE
+					WHEN currentPage = 1
+					THEN 1
+					ELSE 0 
+				END AS isFirst,
+			   CASE
+					WHEN currentPage = totalPage
+					THEN 1
+					ELSE 0 
+				END AS isLast
+			FROM(
+				SELECT count(*) totalCount, ceil(count(*)/10) totalPage,#{page} currentPage, 0 isFirst, 0 isLast
+				FROM product_tb
+				<if test="type == 'id' and keyword != ''">
+					WHERE id = #{keyword}
+				</if>
+				<if test="type == 'productName' and keyword != null" >
+					WHERE product_name like CONCAT('%',#{keyword},'%')
+				</if>
+			) ost;
+	
+	</select>
+	
+	<select id="findByKeywordAndCurrentPage" resultType = "com.tencoding.cuggishop.dto.response.ProductResponseDto">
+		SELECT * FROM product_tb
+				<if test="type == 'id' and keyword != ''">
+					WHERE id = #{keyword}
+				</if>
+				<if test="type == 'productName' and keyword != null" >
+					WHERE product_name like CONCAT('%',#{keyword},'%')
+				</if>
+		ORDER BY id DESC
+		LIMIT #{startNum}, 10;
+	</select>
+	
+	<select id="findAdminProductByProductId" resultType = "com.tencoding.cuggishop.dto.response.AdminProductResponseDto">
+		SELECT pt.*, pit.id imgId, pit.image , pit.is_thumbnail , sct.id scId, sct.second_category_name , fct.id fcId, fct.first_category_name   
+		FROM product_tb pt 
+		JOIN product_image_tb pit ON pt.id = pit.product_id 
+		JOIN second_category_tb sct ON pt.second_category_id = sct.id 
+		JOIN first_category_tb fct ON fct.id = sct.first_category_id  
+		WHERE pt.id = #{productId};
+	</select>
+	
+	<select id="findBySearchProductAll" resultType = "com.tencoding.cuggishop.dto.response.ProductSearchListResponseDto">	
+		select pt.second_category_id,pit.product_id, pt.product_name, pit.image
+		from 
+		product_image_tb pit
+		left join  product_tb pt
+		on pt.id = pit.product_id
+		where pt.product_name like CONCAT('%',#{searchData},'%') and pit.is_thumbnail=1
+        group by pit.product_id
+        limit 9
+	</select>
+</mapper>
