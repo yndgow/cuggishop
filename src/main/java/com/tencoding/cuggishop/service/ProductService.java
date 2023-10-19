@@ -2,7 +2,6 @@ package com.tencoding.cuggishop.service;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,9 +15,7 @@ import com.tencoding.cuggishop.dto.response.ProductSearchListResponseDto;
 import com.tencoding.cuggishop.dto.response.ProductListResponseDto;
 import com.tencoding.cuggishop.repository.interfaces.ProductRepository;
 
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 public class ProductService {
 	
@@ -76,7 +73,7 @@ public class ProductService {
 	public Integer countProductListSize(Integer firstCategoryId, Integer secondCategoryId, String filter, String searchData) {
 		List<ProductListResponseDto> productList = productRepository.findByAllForCateOrderByDesc(firstCategoryId, secondCategoryId, filter, searchData);
 		Set<Integer> productIdSet = new HashSet<>(); // productId를 넣어 개수를 체크할 Set 생성 
-		// 반복문의로 productId를 Set에 넣어 중복제거
+		// 반복문으로 productId를 Set에 넣어 중복제거
 		for(int i = 0; i < productList.size(); i++) {
 			int productId = productList.get(i).getProductId();
 			productIdSet.add(productId);
@@ -141,7 +138,7 @@ public class ProductService {
 	 * 헤더 검색
 	 */
 	public List<ProductSearchListResponseDto> searchProductList(String searchData) {
-		List<ProductSearchListResponseDto> searchList = productRepository.findBySearchProductAll(searchData);
-		return searchList;
+		return productRepository.findBySearchProductAll(searchData);
+		
 	}	
 }

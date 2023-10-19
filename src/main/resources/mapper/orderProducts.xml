@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper
-	namespace="com.tencoding.CUGGI.repository.interfaces.OrderProductsRepository">
+	namespace="com.tencoding.cuggishop.repository.interfaces.OrderProductsRepository">
 
 	<insert id="insert">
 		INSERT INTO order_products_tb(quantity, price,
@@ -16,10 +16,10 @@
 		#{productName},
 		WHERE id = #{id}
 	</update>
-	<update id="">
+<!-- 	<update id="">
 	UPDATE order_products_tb SET price ={price}
     WHERE order_id =#{orderId}	
-	</update>
+	</update> -->
 
 	<update id="orderDetailUpdate">
 		UPDATE order_tb SET status="취소 요청"
@@ -31,18 +31,18 @@
 	</delete>
 
 	<select id="findById"
-		resultType="com.tencoding.CUGGI.repository.model.OrderProducts">
+		resultType="com.tencoding.cuggishop.repository.model.OrderProducts">
 		SELECT * FROM order_products_tb WHERE id = #{id}
 	</select>
 
 	<select id="findByAll"
-		resultType="com.tencoding.CUGGI.repository.model.OrderProducts">
+		resultType="com.tencoding.cuggishop.repository.model.OrderProducts">
 		SELECT * FROM order_products_tb
 	</select>
 	
 
 	<select id="findByDetailList"
-		resultType="com.tencoding.CUGGI.dto.response.OrderDetailProductResponseDto">
+		resultType="com.tencoding.cuggishop.dto.response.OrderDetailProductResponseDto">
 		select op.order_id,pi.image, op.price, op.quantity, op.product_name,
 		s.second_category_name, o.state,op.id as productId
 		from order_products_tb op
@@ -62,7 +62,7 @@
 	</select>
 
 	<select id="findByDetailPerson"
-		resultType="com.tencoding.CUGGI.dto.response.OrderDetailProductResponseDto">
+		resultType="com.tencoding.cuggishop.dto.response.OrderDetailProductResponseDto">
 		select p.name, p.address, p.phone_number, p.email
 		from
 		person_tb p
@@ -73,7 +73,7 @@
 	</select>
 
 	<select id="findByDetailPayment"
-		resultType="com.tencoding.CUGGI.dto.response.OrderDetailProductResponseDto">
+		resultType="com.tencoding.cuggishop.dto.response.OrderDetailProductResponseDto">
 		select op.quantity * op.price
 		from order_products_tb op
 		left join order_tb o
@@ -83,12 +83,12 @@
 	</select>
 	
 	<select id="findByOrderIdAndProductId"
-		resultType="com.tencoding.CUGGI.repository.model.OrderProducts">
+		resultType="com.tencoding.cuggishop.repository.model.OrderProducts">
 		SELECT * FROM order_products_tb WHERE order_id =#{orderId} AND product_id = #{productId};
 	</select>
 	
 	<select id="findByOrderId"
-		resultType="com.tencoding.CUGGI.repository.model.OrderProducts">
+		resultType="com.tencoding.cuggishop.repository.model.OrderProducts">
 		
 SELECT * 
 FROM order_products_tb op
