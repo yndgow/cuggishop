@@ -11,7 +11,7 @@ spring:
       prefix: /WEB-INF/view/
       suffix: .jsp
   datasource:
-    url: jdbc:mysql://13.209.99.222:3306/CUGGI?serverTimeZone=Asia/Seoul&allowMultiQueries=true
+    url: jdbc:mysql://43.200.3.134:3306/CUGGI?serverTimeZone=Asia/Seoul&allowMultiQueries=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: awskjh
     password: 7193asd
