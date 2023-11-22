@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateUserDto {
-	
+
 	private int userId;
 	private String username;
 	private String password;
@@ -23,7 +23,7 @@ public class UpdateUserDto {
 	private String email;
 	private String phoneNumber;
 	private Date birthday;
-	
+
 	public UpdateUserDto(User user, Person person) {
 		this.userId = user.getId();
 		this.username = user.getUsername();
@@ -35,15 +35,16 @@ public class UpdateUserDto {
 		this.phoneNumber = person.getPhoneNumber();
 		this.birthday = person.getBirthday();
 	}
-	
+
 	public User toUserEntity() {
 		User user = new User(this.userId, this.username, this.password, 0, null);
 		return user;
 	}
-	
+
 	public Person toPersonEntity() {
-		Person person = new Person(0, this.name, this.address, this.addressDetail, this.email, this.phoneNumber, this.birthday, this.userId, null);
+		Person person = new Person(0, this.name, this.address, this.addressDetail, this.email, this.phoneNumber,
+				this.birthday, this.userId, null);
 		return person;
 	}
-	
+
 }

@@ -1,12 +1,15 @@
 package com.tencoding.cuggishop.service;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -59,6 +62,8 @@ import com.tencoding.cuggishop.repository.model.OfflineStore;
 import com.tencoding.cuggishop.repository.model.Order;
 import com.tencoding.cuggishop.repository.model.Payment;
 import com.tencoding.cuggishop.repository.model.Person;
+import com.tencoding.cuggishop.repository.model.Product;
+import com.tencoding.cuggishop.repository.model.Qna;
 import com.tencoding.cuggishop.repository.model.SecondCategory;
 import com.tencoding.cuggishop.repository.model.User;
 import com.tencoding.cuggishop.util.Mail;
@@ -467,6 +472,7 @@ public class AdminService {
 		if (page <= 0) {
 			page = 1;
 		}
+
 		PagingResponseDto PagingResponseDto = qnaRepository.findPaging(type, kerword, page, status);
 		int startNum = (page - 1) * 10;
 		List<UserInfoListDto> userList = userRepository.findByKeywordAndCurrentPage(type, kerword, startNum, status);

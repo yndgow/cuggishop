@@ -7,7 +7,7 @@ import com.tencoding.cuggishop.repository.interfaces.FirstCategoryRepository;
 
 @Service
 public class FirstCategoryService {
-	
+
 	@Autowired
 	FirstCategoryRepository firstCategoryRepository;
 }

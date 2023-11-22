@@ -16,6 +16,6 @@ public class UpdateProductReqeustDto {
 	private int quantity;
 	private String fcName;
 	private String scName;
-	
+
 	private int secondCategoryId;
 }

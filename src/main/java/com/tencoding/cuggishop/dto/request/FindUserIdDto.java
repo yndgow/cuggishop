@@ -6,5 +6,5 @@ import lombok.Data;
 public class FindUserIdDto {
 	private int userId;
 	private String email;
-	
+
 }

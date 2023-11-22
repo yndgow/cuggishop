@@ -12,20 +12,20 @@ import lombok.EqualsAndHashCode;
 public class InsertProductRequestDto {
 
 	private Product product;
-	
+
 	private List<MultipartFile> thumbImg;
 	private List<MultipartFile> detailImg;
-	
-	public List<ImgRequestDto> toImgReqDtoList(List<MultipartFile> imgList, int isThumbnail, int productId){
+
+	public List<ImgRequestDto> toImgReqDtoList(List<MultipartFile> imgList, int isThumbnail, int productId) {
 		List<ImgRequestDto> newList = imgList.stream()
-											 .map(ImgRequestDto::new)
-											 .collect(Collectors.toList());
-		
-		for(ImgRequestDto dto: newList) {
+				.map(ImgRequestDto::new)
+				.collect(Collectors.toList());
+
+		for (ImgRequestDto dto : newList) {
 			dto.setIsThumbnail(isThumbnail);
 			dto.setProductId(productId);
 		}
-		
+
 		return newList;
 	}
 }

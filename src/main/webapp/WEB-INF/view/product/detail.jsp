@@ -89,7 +89,7 @@
                 품질보증기준: A/S 보증기간 2년<br />
                 (상품 이상 시 무상수선, 고객의 부주의로 판단되는 경우 유상수선)
               </li>
-              <li>AS 유선접수: 클라이언트서비스 00-0000-0000 / cservice@cuggishop.com</li>
+              <li>AS 유선접수: 클라이언트서비스 00-0000-0000 / cservice@cuggi.com</li>
             </ul>
           </div>
         </div>

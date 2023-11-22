@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class OrderDetailProductResponseDto {
-	
+
 	String image;
 	String productName;
 	int categoryId;

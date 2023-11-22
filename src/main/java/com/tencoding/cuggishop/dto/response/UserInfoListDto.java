@@ -3,6 +3,7 @@ package com.tencoding.cuggishop.dto.response;
 import java.sql.Date;
 
 import lombok.Data;
+
 @Data
 public class UserInfoListDto {
 	private int id;

@@ -1,8 +1,12 @@
 package com.tencoding.cuggishop.repository.model;
 
+import java.sql.Timestamp;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Data
 @AllArgsConstructor
@@ -14,7 +18,7 @@ public class OrderProducts {
 	int price;
 	int productId;
 	String productName;
-	
+
 	public OrderProducts(int orderId, Product product) {
 		this.id = 0;
 		this.quantity = 1;

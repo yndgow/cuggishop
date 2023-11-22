@@ -67,20 +67,20 @@ const makeImgDiv = (type, id) => {
 	const size = (type == 'thumb') ? 316 : 490; // 이미지타입이 썸네일이면 316, 아니면 490
 	const areaSelector = type === 'thumb' ? '#thumbnailImgTd' : '#detailImglTd'; // type 체크해서 셀렉터 지정
 	const area = document.querySelectorAll(`${areaSelector} > .imgDiv`); // 셀렉터의 .imgDiv 요소를 가져옴
-	// 이미지 개수 각 최대 5개 제한	
+	// 이미지 개수 각 최대 5개 제한
 	if (area.length >= maxSize) {
 		alert('이미지는 최대 허용개수는 각 5개입니다.');
 		return;
 	}
 
 	newImgDiv.innerHTML = `<img src="https://via.placeholder.com/${size}" class="card-img-top" alt="temp" style="height: 233px; object-fit: contain;">
-	<div class="card-body d-flex">
-		<label for="${type}-${count}" class="custom-file-upload col-10">
-			<span>파일 선택</span>
-		</label>
-		<input type="file" id="${type}-${count}" class="form-control updateFile" name="${type}-${count}" style="display: none;">
-		<div class="btn deleteImg col-2"><i class="fa-solid fa-x" style="font-size: 26px; line-height: 26px;"></i></div>
-	</div>`;
+   <div class="card-body d-flex">
+      <label for="${type}-${count}" class="custom-file-upload col-10">
+         <span>파일 선택</span>
+      </label>
+      <input type="file" id="${type}-${count}" class="form-control updateFile" name="${type}-${count}" style="display: none;">
+      <div class="btn deleteImg col-2"><i class="fa-solid fa-x" style="font-size: 26px; line-height: 26px;"></i></div>
+   </div>`;
 	const tdinnerDiv = document.querySelector(`#${id}`);
 	tdinnerDiv.append(newImgDiv); // 위의 코드를 조합해서 붙이기
 	count++; // 중복 name값을 피하기 위한 변수
@@ -111,4 +111,3 @@ function readURL(input) {
 		input.previousElementSibling.src = "";
 	}
 }
-

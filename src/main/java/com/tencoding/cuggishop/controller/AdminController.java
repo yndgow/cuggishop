@@ -1,5 +1,6 @@
 package com.tencoding.cuggishop.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,17 +11,22 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.tencoding.cuggishop.dto.request.ImgRequestDto;
 import com.tencoding.cuggishop.dto.request.InsertOfflineStoreRequestDto;
+import com.tencoding.cuggishop.dto.request.InsertPaymentRequestDto;
 import com.tencoding.cuggishop.dto.request.InsertProductRequestDto;
 import com.tencoding.cuggishop.dto.request.UpdateProductReqeustDto;
 import com.tencoding.cuggishop.dto.request.UpdateUserDto;
@@ -29,17 +35,22 @@ import com.tencoding.cuggishop.dto.request.UpdateOfflineStoreRequestDto;
 import com.tencoding.cuggishop.dto.request.UpdateOrderListRequestDto;
 import com.tencoding.cuggishop.dto.response.OrderListResponseDto;
 import com.tencoding.cuggishop.dto.response.PaymentResponseDto;
+import com.tencoding.cuggishop.dto.response.ProductListResponseDto;
 import com.tencoding.cuggishop.dto.response.ProductResponseDto;
+import com.tencoding.cuggishop.repository.model.User;
 import com.tencoding.cuggishop.dto.response.AdminOrderDetailListResponseDto;
 import com.tencoding.cuggishop.dto.response.AdminPageListDto;
 import com.tencoding.cuggishop.dto.response.AdminProductResponseDto;
 import com.tencoding.cuggishop.dto.response.OfflineStoreListResponseDto;
 import com.tencoding.cuggishop.dto.response.OfflineStoreResponseDto;
+import com.tencoding.cuggishop.dto.response.OrderBasketResponseDto;
 import com.tencoding.cuggishop.dto.response.QnaAnswerResponseDto;
 import com.tencoding.cuggishop.dto.response.QnaListResponseDto;
 import com.tencoding.cuggishop.dto.response.UserInfoDetailDto;
 import com.tencoding.cuggishop.dto.response.UserInfoListDto;
 import com.tencoding.cuggishop.handler.exception.CustomRestfulException;
+import com.tencoding.cuggishop.repository.model.FirstCategory;
+import com.tencoding.cuggishop.repository.model.Qna;
 import com.tencoding.cuggishop.repository.model.SecondCategory;
 import com.tencoding.cuggishop.service.AdminService;
 
@@ -65,7 +76,6 @@ public class AdminController {
 		AdminPageListDto<OfflineStoreListResponseDto> adminPageListDto = adminService.OfflineStoreList(type, keyword,
 				page);
 		model.addAttribute("adminPageListDto", adminPageListDto);
-		model.addAttribute("page", page);
 		return "admin/offlineStore/offlineStoreManagement";
 	}
 
@@ -131,7 +141,6 @@ public class AdminController {
 				status);
 
 		model.addAttribute("OrderadminPageListDto", OrderadminPageListDto);
-		model.addAttribute("page", page);
 
 		return "admin/order/orderManagement";
 	}
@@ -197,7 +206,6 @@ public class AdminController {
 			Model model) {
 		AdminPageListDto<QnaListResponseDto> adminPageListDto = adminService.qnaList(type, keyword, page, status);
 		model.addAttribute("adminPageListDto", adminPageListDto);
-		model.addAttribute("page", page);
 		return "admin/qna/qnaList";
 	}
 
@@ -328,7 +336,6 @@ public class AdminController {
 			@RequestParam(required = false) String status, Model model) {
 		AdminPageListDto<UserInfoListDto> adminPageListDto = adminService.userList(type, keyword, page, status);
 		model.addAttribute("adminPageListDto", adminPageListDto);
-		model.addAttribute("page", page);
 		return "admin/user/userInfoList";
 	}
 

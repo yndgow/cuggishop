@@ -21,9 +21,9 @@ public class SignUpDto {
 	private String phone_number;
 	private Date birthday;
 	private Integer level;
-	
-	public Person toPersonEntity(int userId) { 
-		
+
+	public Person toPersonEntity(int userId) {
+
 		return new Person(0, name, address, address_detail, email, phone_number, birthday, userId, null);
 	}
 }

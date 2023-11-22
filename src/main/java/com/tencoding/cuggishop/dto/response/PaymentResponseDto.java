@@ -2,6 +2,7 @@ package com.tencoding.cuggishop.dto.response;
 
 import java.sql.Timestamp;
 
+import com.tencoding.cuggishop.repository.model.Order;
 import com.tencoding.cuggishop.repository.model.Payment;
 
 import lombok.AllArgsConstructor;

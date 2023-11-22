@@ -6,11 +6,15 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.tencoding.cuggishop.dto.response.AdminOrderDetailListResponseDto;
+import com.tencoding.cuggishop.dto.response.OfflineStoreResponseDto;
 import com.tencoding.cuggishop.dto.response.OrderBasketResponseDto;
 import com.tencoding.cuggishop.dto.response.OrderListResponseDto;
 import com.tencoding.cuggishop.dto.response.PagingResponseDto;
 
+import com.tencoding.cuggishop.repository.model.OfflineStore;
 import com.tencoding.cuggishop.repository.model.Order;
+import com.tencoding.cuggishop.repository.model.OrderProducts;
+import com.tencoding.cuggishop.repository.model.Payment;
 
 @Mapper
 public interface OrderRepository {

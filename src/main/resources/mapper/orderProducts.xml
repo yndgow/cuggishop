@@ -16,6 +16,10 @@
 		#{productName},
 		WHERE id = #{id}
 	</update>
+	<update id="">
+	UPDATE order_products_tb SET price ={price}
+    WHERE order_id =#{orderId}	
+	</update>
 
 	<update id="orderDetailUpdate">
 		UPDATE order_tb SET status="취소 요청"

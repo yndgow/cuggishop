@@ -4,7 +4,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>CUGGI</title>
+    <title>cuggishop</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://kit.fontawesome.com/e8f010a863.js" crossorigin="anonymous"></script>
     <link
@@ -29,14 +29,14 @@
         flex-wrap: nowrap;
         height: 100vh;
         height: -webkit-fill-available;
-        max-height: 100vh;
+        /*max-height: 100vh;*/
         overflow-x: auto;
         overflow-y: hidden;
       }
 
       .b-example-divider {
         flex-shrink: 0;
-        width: 1.5rem;
+        /*width: 1.5rem;*/
         height: 100vh;
         background-color: rgba(0, 0, 0, 0.1);
         border: solid rgba(0, 0, 0, 0.15);
@@ -49,30 +49,12 @@
         pointer-events: none;
         fill: currentColor;
       }
-
-      .updateProduct .imgDiv{
-      	width: 20%;
-      }
-      .updateProduct .custom-file-upload {
-		  display: inline-block;
-		  padding: 10px 20px;
-		  background-color: #007bff;
-		  color: #fff;
-		  cursor: pointer;
-		  border-radius: 5px;
-		  font-weight: bold;
-		  text-align: center;
-		  transition: background-color 0.3s ease;
-	  }
-	  .custom-file-upload:hover {
-  		  background-color: #0056b3;
-	  }
     </style>
   </head>
   <body>
     <main>
       <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px">
-        <span class="fs-4 text-center">CUGGI Admin</span>
+        <span class="fs-4 text-center">cuggishop Admin</span>
         <hr />
         <ul class="nav nav-pills flex-column mb-auto">
           <li>

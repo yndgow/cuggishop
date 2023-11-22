@@ -17,12 +17,11 @@ public class OfflineStoreListResponseDto {
 	int storeNumber;
 	String storeAddress;
 	String storeAddressDetail;
-	
 
 	public static OfflineStoreListResponseDto fromEntity(OfflineStore offlineStore) {
 		return new OfflineStoreListResponseDto(offlineStore.getId(),
-				offlineStore.getStoreName(), 
-				offlineStore.getStoreNumber(), 
+				offlineStore.getStoreName(),
+				offlineStore.getStoreNumber(),
 				offlineStore.getStoreAddress(),
 				offlineStore.getStoreAddressDetail());
 	}

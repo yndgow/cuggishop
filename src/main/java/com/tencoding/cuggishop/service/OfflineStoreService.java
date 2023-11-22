@@ -6,7 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tencoding.cuggishop.dto.response.AdminPageListDto;
 import com.tencoding.cuggishop.dto.response.OfflineStoreListResponseDto;
+import com.tencoding.cuggishop.dto.response.PagingResponseDto;
 import com.tencoding.cuggishop.repository.interfaces.OfflineStoreRepository;
 import com.tencoding.cuggishop.repository.model.OfflineStore;
 

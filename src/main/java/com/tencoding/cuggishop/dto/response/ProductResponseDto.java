@@ -17,7 +17,7 @@ public class ProductResponseDto {
 	private Timestamp createdAt;
 	private String image;
 	private String secondCategoryName;
-	
+
 	public void setPrice(Integer price) {
 		DecimalFormat decimalFormat = new DecimalFormat("#,###");
 		this.price = decimalFormat.format(price);

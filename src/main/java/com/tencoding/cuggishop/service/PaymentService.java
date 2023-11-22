@@ -9,9 +9,8 @@ import com.tencoding.cuggishop.repository.model.Payment;
 
 @Service
 public class PaymentService {
-	
+
 	@Autowired
 	PaymentRepository paymentRepository;
-
 
 }

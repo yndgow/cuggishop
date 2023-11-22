@@ -13,7 +13,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-// @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class) - 한번에 변경하는 방법
+// @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class) - 한번에
+// 변경하는 방법
 public class KakaoProfile {
 
 	@JsonProperty("id")
@@ -54,18 +55,17 @@ public class KakaoProfile {
 		private Boolean isEmailVerified;
 		@JsonProperty("email")
 		private String email;
-		
-		
+
 		@JsonInclude(JsonInclude.Include.NON_NULL)
 		@JsonPropertyOrder({
-		"nickname"
+				"nickname"
 		})
 		@Data
 		public class Profile {
 			@JsonProperty("nickname")
 			private String nickname;
 		}
-		
+
 	}
 
 }

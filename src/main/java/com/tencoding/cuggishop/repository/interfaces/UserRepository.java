@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.tencoding.cuggishop.dto.request.SignInDto;
 import com.tencoding.cuggishop.dto.request.SignUpDto;
+import com.tencoding.cuggishop.dto.response.QnaListResponseDto;
 import com.tencoding.cuggishop.dto.response.UserInfoDetailDto;
 import com.tencoding.cuggishop.dto.response.UserInfoListDto;
 import com.tencoding.cuggishop.repository.model.User;

@@ -1,10 +1,8 @@
 package com.tencoding.cuggishop.dto.response;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 @Data
-@EqualsAndHashCode(callSuper = false)
 public class AdminProductResponseDto extends ProductResponseDto {
 
 	private Integer imgId;

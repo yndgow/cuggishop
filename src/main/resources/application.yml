@@ -19,8 +19,8 @@ spring:
   mail:
     host: smtp.gmail.com # 1
     port: 587 # 2
-    username: cuggishopateam # 3
-    password: # 4
+    username: cuggiateam # 3
+    password: ooie ooxh mxxw gxxn # 4
     properties:
       mail:
         smtp:
@@ -37,7 +37,21 @@ spring:
       max-file-size: 10MB
 
 file:
-  path: /home/upload/
+  path: c:\upload\
+
+#  sql:
+#    init:
+#      schema-locations:
+#      - classpath:db/table.sql
+#      data-locations:
+#      - classpath:db/data.sql
+
+#  h2:
+#    console:
+#      enabled: true
+#  output:
+#   ansi:
+#     enabled: always
 
 mybatis:
   mapper-locations:
@@ -51,5 +65,4 @@ tenco:
   key: 85135F3C6BFE9DF1735F8806F045AE73CECE7219F7840D8E7E9297A7F846B48A
 #logging:
 #level:
-#'[org.mybatis]': DEBUG
-
+# '[org.mybatis]': DEBUG

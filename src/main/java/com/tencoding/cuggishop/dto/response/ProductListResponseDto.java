@@ -15,5 +15,5 @@ public class ProductListResponseDto {
 	private String image;
 	private String firstCategoryName;
 	private String secondCategoryName;
-	
+
 }

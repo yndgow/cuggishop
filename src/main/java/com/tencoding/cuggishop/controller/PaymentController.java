@@ -25,7 +25,5 @@ public class PaymentController {
 
 	@Autowired
 	HttpSession session;
-	
-	
-	
+
 }

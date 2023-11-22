@@ -8,13 +8,13 @@ import com.tencoding.cuggishop.repository.model.ProductImage;
 
 @Service
 public class ProductImageService {
-	
+
 	@Autowired
 	ProductImageRepository productImageRepository;
-	
 
 	/**
 	 * 상품 detail 섬네일 가져오기
+	 * 
 	 * @param productImageId
 	 * @return ProductImage
 	 */

@@ -7,7 +7,7 @@ import com.tencoding.cuggishop.repository.interfaces.OrderProductsRepository;
 
 @Service
 public class OrderProductsService {
-	
+
 	@Autowired
 	OrderProductsRepository orderProductsRepository;
 }

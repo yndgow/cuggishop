@@ -10,7 +10,7 @@ public class QnaPersonResponseDto {
 	private String name;
 	private String email;
 	private String phoneNumber;
-	
+
 	public QnaPersonResponseDto(Person person) {
 		this.userId = person.getUserId();
 		this.name = person.getName();

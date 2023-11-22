@@ -15,11 +15,11 @@ import lombok.NoArgsConstructor;
 public class UpdateOrderListRequestDto {
 
 	int id;
-	int userId;	
+	int userId;
 	Timestamp purchaseDate;
 	Timestamp cancelDate;
 	Timestamp createdAt;
-	
+
 	String image;
 	String productName;
 	String State;
@@ -27,13 +27,13 @@ public class UpdateOrderListRequestDto {
 	int orderId;
 
 	public Order toEntity() {
-		return new Order(this.id, this.userId, this.purchaseDate, this.cancelDate, this.createdAt, this.image, this.productName, this.State, this.price, this.orderId);
-	}
-	
-	public Order toEntity2(int orderId) {
-		return new Order(id = orderId, this.userId, this.purchaseDate, this.cancelDate, this.createdAt, this.image, this.productName, this.State, this.price, orderId);
+		return new Order(this.id, this.userId, this.purchaseDate, this.cancelDate, this.createdAt, this.image,
+				this.productName, this.State, this.price, this.orderId);
 	}
 
-		
-  
+	public Order toEntity2(int orderId) {
+		return new Order(id = orderId, this.userId, this.purchaseDate, this.cancelDate, this.createdAt, this.image,
+				this.productName, this.State, this.price, orderId);
+	}
+
 }

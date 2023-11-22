@@ -13,14 +13,13 @@ public class OfflineStoreResponseDto {
 	int storeNumber;
 	String storeAddress;
 	String storeAddressDetail;
-	
-	public static OfflineStoreResponseDto fromEntity(OfflineStore offlineStore){
+
+	public static OfflineStoreResponseDto fromEntity(OfflineStore offlineStore) {
 		return new OfflineStoreResponseDto(
-				offlineStore.getId(), 
-				offlineStore.getStoreName(), 
-				offlineStore.getStoreNumber(), 
-				offlineStore.getStoreAddress(), 
-				offlineStore.getStoreAddressDetail()
-				);
+				offlineStore.getId(),
+				offlineStore.getStoreName(),
+				offlineStore.getStoreNumber(),
+				offlineStore.getStoreAddress(),
+				offlineStore.getStoreAddressDetail());
 	}
 }

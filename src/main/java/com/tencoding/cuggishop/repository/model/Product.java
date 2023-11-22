@@ -16,9 +16,9 @@ import lombok.Setter;
 public class Product {
 	int id;
 	int secondCategoryId;
-	String productName ;
+	String productName;
 	int price;
 	int quantity;
-	String productFeature ;
+	String productFeature;
 	Timestamp createdAt;
 }

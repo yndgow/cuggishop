@@ -10,6 +10,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.tencoding.cuggishop.handler.exception.CustomRestfulException;
+import com.tencoding.cuggishop.handler.exception.UnAuthorizedException;
 import com.tencoding.cuggishop.repository.model.User;
 import com.tencoding.cuggishop.util.Define;
 
@@ -18,6 +19,7 @@ public class AdminInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
+		System.out.println("preHandle() 메서드 호출");
 		HttpSession session = request.getSession();
 
 		User principal = (User) session.getAttribute(Define.PRINCIPAL);
@@ -31,6 +33,7 @@ public class AdminInterceptor implements HandlerInterceptor {
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
+		// TODO Auto-generated method stub
 		HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
 	}
 }

@@ -10,21 +10,21 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@Component // IoC 대상 - 2개 이상의 빈을 등록해야 할 때 사용 
+@Component // IoC 대상 - 2개 이상의 빈을 등록해야 할 때 사용
 public class WebMvcConfig implements WebMvcConfigurer {
-	
-	// DI 처리 
+
+	// DI 처리
 	@Autowired
 	private AuthInterceptor authInterceptor;
-	
+
 	@Autowired
 	private AdminInterceptor amdinInterceptor;
-	
+
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(authInterceptor)
-		.addPathPatterns("/order/**");
-		
+				.addPathPatterns("/order/**");
+
 		registry.addInterceptor(amdinInterceptor).addPathPatterns("/admin/**");
 	}
 
@@ -32,16 +32,15 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-	
+
 	@Value("${file.path}")
 	private String filePath;
-	
+
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		WebMvcConfigurer.super.addResourceHandlers(registry);
 		registry.addResourceHandler("/upload/**")
 				.addResourceLocations("file:///" + filePath);
 	}
-	
-	
+
 }

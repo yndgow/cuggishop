@@ -10,8 +10,8 @@ public class InsertOfflineStoreRequestDto {
 	Integer storeNumber;
 	String storeAddress;
 	String storeAddressDetail;
-	
+
 	public OfflineStore toEntity() {
-		return new OfflineStore(0 , this.storeName, this.storeNumber, this.storeAddress, this.storeAddressDetail, null);
+		return new OfflineStore(0, this.storeName, this.storeNumber, this.storeAddress, this.storeAddressDetail, null);
 	}
 }

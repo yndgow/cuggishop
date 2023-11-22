@@ -11,8 +11,9 @@ public class UpdateOfflineStoreRequestDto {
 	Integer storeNumber;
 	String storeAddress;
 	String storeAddressDetail;
-	
+
 	public OfflineStore toEntity() {
-		return new OfflineStore(this.id , this.storeName, this.storeNumber, this.storeAddress, this.storeAddressDetail, null);
+		return new OfflineStore(this.id, this.storeName, this.storeNumber, this.storeAddress, this.storeAddressDetail,
+				null);
 	}
 }

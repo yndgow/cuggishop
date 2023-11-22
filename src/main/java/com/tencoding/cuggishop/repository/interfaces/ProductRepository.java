@@ -21,6 +21,7 @@ public interface ProductRepository {
 
 	public int deleteById(int productId);
 
+	// public Product findById(String productId);
 	public Product findById(int productId);
 
 	public List<Product> findByAll();

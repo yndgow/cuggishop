@@ -35,6 +35,15 @@ public class AuthInterceptor implements HandlerInterceptor {
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
+		// TODO Auto-generated method stub
 		HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
 	}
+
+	// 요청 처리가 완료된 후, 즉, 뷰 렌더링이 완료된 후에 호출 되는 메서드
+	// @Override
+	// public void afterCompletion(HttpServletRequest request, HttpServletResponse
+	// response, Object handler,
+	// @Nullable Exception ex) throws Exception {
+	// }
+
 }

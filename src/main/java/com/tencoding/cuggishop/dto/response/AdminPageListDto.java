@@ -7,13 +7,12 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdminPageListDto<T>{
-	
+public class AdminPageListDto<T> {
+
 	int totalPage;
 	int currentPage;
 	int startPageNum;
@@ -24,8 +23,9 @@ public class AdminPageListDto<T>{
 	String type;
 	String status;
 	List<T> list;
-	
-	public AdminPageListDto(PagingResponseDto pagingResponseDto, String keyword, String type, String status, List<T> list){
+
+	public AdminPageListDto(PagingResponseDto pagingResponseDto, String keyword, String type, String status,
+			List<T> list) {
 		this.totalPage = pagingResponseDto.totalPage;
 		this.currentPage = pagingResponseDto.currentPage;
 		this.isFirst = pagingResponseDto.isFirst;
@@ -34,10 +34,10 @@ public class AdminPageListDto<T>{
 		this.type = type;
 		this.status = status;
 		this.list = list;
-		
+
 		int blockCount = 10;
 
-		int currentBlock = (this.currentPage-1) / blockCount;
+		int currentBlock = (this.currentPage - 1) / blockCount;
 		this.startPageNum = 1 + blockCount * currentBlock;
 		this.lastPageNum = 10 + blockCount * currentBlock;
 

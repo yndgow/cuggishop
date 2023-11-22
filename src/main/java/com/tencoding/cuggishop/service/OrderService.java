@@ -17,6 +17,7 @@ import com.tencoding.cuggishop.repository.interfaces.OrderProductsRepository;
 import com.tencoding.cuggishop.repository.interfaces.OrderRepository;
 import com.tencoding.cuggishop.repository.interfaces.PaymentRepository;
 import com.tencoding.cuggishop.repository.interfaces.ProductRepository;
+import com.tencoding.cuggishop.repository.model.OfflineStore;
 import com.tencoding.cuggishop.repository.model.Order;
 import com.tencoding.cuggishop.repository.model.OrderProducts;
 import com.tencoding.cuggishop.repository.model.Payment;

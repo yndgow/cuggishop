@@ -1,4 +1,4 @@
-	package com.tencoding.cuggishop.repository.model;
+package com.tencoding.cuggishop.repository.model;
 
 import java.sql.Timestamp;
 

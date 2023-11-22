@@ -13,10 +13,9 @@ public class InsertPaymentRequestDto {
 	String tid;
 	int orderId;
 	Timestamp createdAt;
-	
-	public Payment toEntity(int orderId) {	
+
+	public Payment toEntity(int orderId) {
 		return new Payment(this.id, this.tid, orderId, this.createdAt);
 	}
-	
-	
+
 }

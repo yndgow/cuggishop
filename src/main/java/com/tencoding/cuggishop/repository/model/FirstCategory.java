@@ -15,6 +15,6 @@ import lombok.Setter;
 @Getter
 public class FirstCategory {
 	int id;
-	String firstCategoryName ;
+	String firstCategoryName;
 	Timestamp createdAt;
 }

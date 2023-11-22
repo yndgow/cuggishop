@@ -1,6 +1,5 @@
 package com.tencoding.cuggishop.dto.request;
 
-
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
@@ -19,7 +18,7 @@ public class ImgRequestDto {
 	private String image;
 	private int isThumbnail;
 	private int productId;
-	
+
 	public ImgRequestDto(MultipartFile file) {
 		this.file = file;
 	}

@@ -22,6 +22,7 @@ public class SecondCategoryService {
 
 	public List<CategoryResponseDto> selectMenu() {
 		List<CategoryResponseDto> secondCategoryList = secondCategoryRepository.findByMenu();
+		System.out.println(secondCategoryList);
 		return secondCategoryList;
 	}
 
