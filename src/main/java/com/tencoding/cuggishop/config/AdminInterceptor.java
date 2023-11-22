@@ -18,14 +18,13 @@ public class AdminInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		// System.out.println("preHandle() 메서드 호출");
 		HttpSession session = request.getSession();
 
 		User principal = (User) session.getAttribute(Define.PRINCIPAL);
-		// if (principal == null || principal.getLevel() < 5) {
-		// throw new CustomRestfulException("관리자만 접근가능합니다.",
-		// HttpStatus.UNAUTHORIZED);
-		// }
+		if (principal == null || principal.getLevel() < 5) {
+			throw new CustomRestfulException("관리자만 접근가능합니다.",
+					HttpStatus.UNAUTHORIZED);
+		}
 		return true;
 	}
 

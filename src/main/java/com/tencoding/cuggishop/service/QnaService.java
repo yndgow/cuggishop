@@ -15,14 +15,14 @@ import com.tencoding.cuggishop.util.Mail;
 
 @Service
 public class QnaService {
-	
+
 	@Autowired
 	QnaRepository qnaRepository;
-	
+
 	@Autowired
 	PersonRepository personRepository;
-	
-	@Resource(name="mail")
+
+	@Resource(name = "mail")
 	private Mail mail;
 
 	public QnaPersonResponseDto readPerson(int id) {
@@ -31,14 +31,11 @@ public class QnaService {
 	}
 
 	public void qnaInsert(QnaFormRequestDto qnaFormRequestDto) {
-		qnaFormRequestDto.setUserId(1);
 		int result = qnaRepository.insert(qnaFormRequestDto);
 		mail.sendSimpleEmail(qnaFormRequestDto);
-		if(result != 1) {
+		if (result != 1) {
 			throw new CustomRestfulException("문의사항 기입이 되지 않았습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
-	
-	
+
 }

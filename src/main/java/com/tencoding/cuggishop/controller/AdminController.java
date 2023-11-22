@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -108,7 +107,7 @@ public class AdminController {
 		return "admin/offlineStore/offlineStoreUpdate";
 	}
 
-	@PutMapping("updateOfflineStore")
+	@PostMapping("updateOfflineStore")
 	public String updateOfflineStore_proc(UpdateOfflineStoreRequestDto updateOfflineStoreRequestDto) {
 		int result = adminService.updateOfflineStore(updateOfflineStoreRequestDto);
 		return "redirect:offlineStoreManagement";
@@ -117,7 +116,7 @@ public class AdminController {
 	@GetMapping("deleteOfflineStore/{id}")
 	public String deleteOfflineStore(@PathVariable("id") int id) {
 		int result = adminService.deleteOfflineStore(id);
-		return "redirect:admin	/offlineStoreManagement";
+		return "redirect:admin/offlineStoreManagement";
 	}
 
 	// offlinestore end
@@ -277,7 +276,7 @@ public class AdminController {
 		// 이미지 정보 업데이트
 		adminService.updateProductImage(files, productId);
 
-		return "redirect:/admin/product/" + productId;
+		return "redirect:/admin/products";
 	}
 
 	// 2차 카테고리 리스트 1차카테고리 기준

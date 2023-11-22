@@ -11,20 +11,18 @@ import com.tencoding.cuggishop.repository.model.SecondCategory;
 
 @Service
 public class SecondCategoryService {
-	
+
 	@Autowired
 	SecondCategoryRepository secondCategoryRepository;
-  
+
 	// 목록 조회
 	public List<SecondCategory> getSecondCategoryList() {
 		return secondCategoryRepository.findByAll();
-  }
+	}
 
 	public List<CategoryResponseDto> selectMenu() {
 		List<CategoryResponseDto> secondCategoryList = secondCategoryRepository.findByMenu();
-		System.out.println(secondCategoryList);
 		return secondCategoryList;
 	}
 
-	
 }

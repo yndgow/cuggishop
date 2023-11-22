@@ -2,6 +2,8 @@ package com.tencoding.cuggishop.controller;
 
 import org.springframework.http.HttpHeaders;
 
+import java.util.Random;
+
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -29,7 +31,9 @@ import com.tencoding.cuggishop.dto.request.SignInDto;
 import com.tencoding.cuggishop.dto.request.SignUpDto;
 import com.tencoding.cuggishop.dto.request.UpdateUserDto;
 import com.tencoding.cuggishop.handler.exception.CustomRestfulException;
+import com.tencoding.cuggishop.repository.model.Person;
 import com.tencoding.cuggishop.repository.model.User;
+import com.tencoding.cuggishop.service.PersonService;
 import com.tencoding.cuggishop.service.UserService;
 import com.tencoding.cuggishop.util.Define;
 

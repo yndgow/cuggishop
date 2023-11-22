@@ -1,15 +1,12 @@
 package com.tencoding.cuggishop.service;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -62,13 +59,12 @@ import com.tencoding.cuggishop.repository.model.OfflineStore;
 import com.tencoding.cuggishop.repository.model.Order;
 import com.tencoding.cuggishop.repository.model.Payment;
 import com.tencoding.cuggishop.repository.model.Person;
-import com.tencoding.cuggishop.repository.model.Product;
-import com.tencoding.cuggishop.repository.model.Qna;
 import com.tencoding.cuggishop.repository.model.SecondCategory;
 import com.tencoding.cuggishop.repository.model.User;
 import com.tencoding.cuggishop.util.Mail;
 
 import lombok.extern.slf4j.Slf4j;
+
 @Slf4j
 @Service
 public class AdminService {
@@ -78,7 +74,7 @@ public class AdminService {
 
 	@Autowired
 	SecondCategoryRepository secondCategoryRepository;
-	
+
 	@Autowired
 	OrderRepository orderRepository;
 
@@ -102,34 +98,37 @@ public class AdminService {
 
 	@Autowired
 	OfflineStoreRepository offlineStoreRepository;
-  
-	@Resource(name="mail")
+
+	@Resource(name = "mail")
 	private Mail mail;
-  
+
 	@Autowired
 	private ProductRepository productRepository;
-	
+
 	@Value("${file.path}")
 	private String filePath;
-	
-	//offlineStore start
+
+	// offlineStore start
 
 	@Transactional
-	public AdminPageListDto<OfflineStoreListResponseDto> OfflineStoreList(String type,String kerword,Integer page){
-		if(page <= 0) {
+	public AdminPageListDto<OfflineStoreListResponseDto> OfflineStoreList(String type, String kerword, Integer page) {
+		if (page <= 0) {
 			page = 1;
 		}
 		PagingResponseDto PagingResponseDto = offlineStoreRepository.findPaging(type, kerword, page);
-		int startNum = (page-1)*10;
-		List<OfflineStore> offlineStoreList = offlineStoreRepository.findByKeywordAndCurrentPage(type, kerword, startNum);
+		int startNum = (page - 1) * 10;
+		List<OfflineStore> offlineStoreList = offlineStoreRepository.findByKeywordAndCurrentPage(type, kerword,
+				startNum);
 
 		List<OfflineStoreListResponseDto> offlineStoreListResponseDto = new ArrayList<OfflineStoreListResponseDto>();
-		for(int i = 0; i< offlineStoreList.size(); i++) {
+		for (int i = 0; i < offlineStoreList.size(); i++) {
 			offlineStoreListResponseDto.add(OfflineStoreListResponseDto.fromEntity(
-					offlineStoreList.get(i))); 
-		}System.out.println("keyword : " + kerword);
-		AdminPageListDto<OfflineStoreListResponseDto> adminPageListDto = new AdminPageListDto<OfflineStoreListResponseDto>(PagingResponseDto, kerword, type, null ,offlineStoreListResponseDto);
-		return adminPageListDto; 
+					offlineStoreList.get(i)));
+		}
+		System.out.println("keyword : " + kerword);
+		AdminPageListDto<OfflineStoreListResponseDto> adminPageListDto = new AdminPageListDto<OfflineStoreListResponseDto>(
+				PagingResponseDto, kerword, type, null, offlineStoreListResponseDto);
+		return adminPageListDto;
 	}
 
 	@Transactional
@@ -142,7 +141,7 @@ public class AdminService {
 	@Transactional
 	public OfflineStoreResponseDto findOfflineStoreById(int id) {
 		OfflineStore offlineStoreEntity = offlineStoreRepository.findById(id);
-		if(offlineStoreEntity == null) {
+		if (offlineStoreEntity == null) {
 			throw new CustomRestfulException("등록되지 않은 지점입니다.", HttpStatus.BAD_REQUEST);
 		}
 		OfflineStoreResponseDto offlineStoreResponseDto = OfflineStoreResponseDto.fromEntity(offlineStoreEntity);
@@ -160,83 +159,79 @@ public class AdminService {
 		int result = offlineStoreRepository.deleteById(id);
 		return result;
 	}
-	
-	//    주문 내역 
+
+	// 주문 내역
 	public List<OrderListResponseDto> readOrderList() {
 		List<OrderListResponseDto> orderList = orderRepository.findByListAdmin();
 		return orderList;
 	}
-	
-  
+
 	@Transactional
-	public AdminPageListDto<OrderListResponseDto> OrderList(String type,String kerword,Integer page,String status){
-		if(page <= 0) {
+	public AdminPageListDto<OrderListResponseDto> OrderList(String type, String kerword, Integer page, String status) {
+		if (page <= 0) {
 			page = 1;
-		}		
-		if(status == null) {
+		}
+		if (status == null) {
 			status = "";
 		}
 		PagingResponseDto PagingResponseDto = orderRepository.findPaging(type, kerword, page, status);
-		int startNum = (page-1)*10;
-		List<OrderListResponseDto> orderListResponseDto = orderRepository.findByKeywordAndCurrentPage(type, kerword, startNum, status);
+		int startNum = (page - 1) * 10;
+		List<OrderListResponseDto> orderListResponseDto = orderRepository.findByKeywordAndCurrentPage(type, kerword,
+				startNum, status);
 
+		AdminPageListDto<OrderListResponseDto> adminPageListDto = new AdminPageListDto<OrderListResponseDto>(
+				PagingResponseDto, kerword, type, status, orderListResponseDto);
 
-
-		AdminPageListDto<OrderListResponseDto> adminPageListDto = new AdminPageListDto<OrderListResponseDto>(PagingResponseDto, kerword, type, status ,orderListResponseDto);
-		
-		if(orderListResponseDto==null) {
+		if (orderListResponseDto == null) {
 			String selection = "*,";
 			int i = 0;
-			while(true) {
+			while (true) {
 				int changeCount = 0;
 				int j = 0;
-				while(true) {
-					if(orderListResponseDto.get(i).getProductName().charAt(j) == selection.charAt(0)) {
-						changeCount =1;
+				while (true) {
+					if (orderListResponseDto.get(i).getProductName().charAt(j) == selection.charAt(0)) {
+						changeCount = 1;
 						System.out.println(changeCount);
 					}
-					if((orderListResponseDto.get(i).getProductName().charAt(j) == ',')&&(changeCount ==1)) {
-						String newProductName = ""; 
-						newProductName = orderListResponseDto.get(i).getProductName().substring(0, j) + "<br>" + 
-								orderListResponseDto.get(i).getProductName().substring(j+1, orderListResponseDto.get(i).getProductName().length());
+					if ((orderListResponseDto.get(i).getProductName().charAt(j) == ',') && (changeCount == 1)) {
+						String newProductName = "";
+						newProductName = orderListResponseDto.get(i).getProductName().substring(0, j) + "<br>" +
+								orderListResponseDto.get(i).getProductName().substring(j + 1,
+										orderListResponseDto.get(i).getProductName().length());
 						orderListResponseDto.get(i).setProductName(newProductName);
-						changeCount=0;
+						changeCount = 0;
 					}
 					j++;
-					if(j>=orderListResponseDto.get(i).getProductName().length()) {
+					if (j >= orderListResponseDto.get(i).getProductName().length()) {
 						break;
 					}
 				}
 				i++;
-				if(i>=orderListResponseDto.size()) {
+				if (i >= orderListResponseDto.size()) {
 					break;
 				}
-				
+
 			}
 		}
-		return adminPageListDto; 
+		return adminPageListDto;
 	}
-	
 
 	public List<AdminOrderDetailListResponseDto> findAdminOrderDetailList(int id) {
 		List<AdminOrderDetailListResponseDto> orderAdminDetailList = orderRepository.findAdminOrderDetailId(id);
 		return orderAdminDetailList;
 	}
 
-
 	@Transactional
 	public OrderListResponseDto findOrderListById(int id) {
-		Order orderEntity = orderRepository.findByDetailId(id);	
+		Order orderEntity = orderRepository.findByDetailId(id);
 
-		if(orderEntity == null) {
+		if (orderEntity == null) {
 			throw new CustomRestfulException("등록되지 않은 주문 내역입니다.", HttpStatus.BAD_REQUEST);
 		}
 		OrderListResponseDto orderListResponseDto = OrderListResponseDto.fromEntity(orderEntity);
 
 		return orderListResponseDto;
 	}
-	
-	
 
 	@Transactional
 	public int updateOrderList(UpdateOrderListRequestDto updateOrderListRequestDto) {
@@ -248,29 +243,29 @@ public class AdminService {
 	@Transactional
 	public PaymentResponseDto findPayment(int id) {
 		Payment orderEntity = paymentRepository.findPayment(id);
-		
-		if(orderEntity == null) {
+
+		if (orderEntity == null) {
 			throw new CustomRestfulException("결제 정보가 없습니다.", HttpStatus.BAD_REQUEST);
 		}
-		
+
 		PaymentResponseDto paymentResponseDto = PaymentResponseDto.fromEntity(orderEntity);
 		return paymentResponseDto;
 	}
 
+	// offlineStore end
 
-	//offlineStore end
-
-	//qna start
+	// qna start
 
 	@Transactional
-	public AdminPageListDto<QnaListResponseDto> qnaList(String type, String kerword,Integer page, String status) {
-		if(page <= 0) {
+	public AdminPageListDto<QnaListResponseDto> qnaList(String type, String kerword, Integer page, String status) {
+		if (page <= 0) {
 			page = 1;
 		}
 		PagingResponseDto PagingResponseDto = qnaRepository.findPaging(type, kerword, page, status);
-		int startNum = (page-1)*10;
+		int startNum = (page - 1) * 10;
 		List<QnaListResponseDto> qnaList = qnaRepository.findByKeywordAndCurrentPage(type, kerword, startNum, status);
-		AdminPageListDto<QnaListResponseDto> adminPageListDto = new AdminPageListDto<QnaListResponseDto>(PagingResponseDto, kerword, type, null ,qnaList);
+		AdminPageListDto<QnaListResponseDto> adminPageListDto = new AdminPageListDto<QnaListResponseDto>(
+				PagingResponseDto, kerword, type, null, qnaList);
 		return adminPageListDto;
 	}
 
@@ -291,65 +286,68 @@ public class AdminService {
 	public int updateOrder(UpdateOrderListRequestDto updateOrderRequestDto, int orderId) {
 		Order orderEntity = updateOrderRequestDto.toEntity2(orderId);
 		int result = orderRepository.orderAdminUpdate(orderEntity);
-		
+
 		return result;
 	}
 
+	// qna end
 
-
-	//qna end
-	
 	// product start
-	
+
 	// 관리자 상품 목록
 	@Transactional
 	public AdminPageListDto<ProductResponseDto> adminProductList(String type, String kerword, Integer page) {
-		if(page <= 0) page = 1;
+		if (page <= 0)
+			page = 1;
 		PagingResponseDto PagingResponseDto = productRepository.findPaging(type, kerword, page);
 		int startNum = (page - 1) * 10;
 		List<ProductResponseDto> productList = productRepository.findByKeywordAndCurrentPage(type, kerword, startNum);
-		AdminPageListDto<ProductResponseDto> productPageList = new AdminPageListDto<ProductResponseDto>(PagingResponseDto, kerword, type, null ,productList);
+		AdminPageListDto<ProductResponseDto> productPageList = new AdminPageListDto<ProductResponseDto>(
+				PagingResponseDto, kerword, type, null, productList);
 		return productPageList;
 	}
+
 	// 관리자 상품 상세
 	@Transactional
 	public List<AdminProductResponseDto> findAdminProductResponseDtoByProductId(String productId) {
 		return productRepository.findAdminProductByProductId(productId);
 	}
-	
+
 	// 관리자 상품 정보 업데이트 (이미지 제외)
 	@Transactional
 	public int updateProduct(UpdateProductReqeustDto updateProductReqeustDto) {
 		return productRepository.updateById(updateProductReqeustDto);
 	}
+
 	/**
-	 *  관리자 상품 정보 업데이트 (이미지)
-	 * @param productId 
-	 * @param Map files
+	 * 관리자 상품 정보 업데이트 (이미지)
+	 * 
+	 * @param productId
+	 * @param Map       files
 	 */
 	@Transactional
 	public void updateProductImage(Map<String, MultipartFile> files, Integer productId) {
 		// List 선언
 		List<ImgRequestDto> updateList = new ArrayList<>(); // 수정
 		List<ImgRequestDto> insertList = new ArrayList<>(); // 추가
-		
+
 		// 키값을 Set으로 가져오기
 		Set<String> keys = files.keySet();
-		for (String key : keys) {		// Set 순회
-			if(files.get(key).getSize() != 0) { // 키값으로 찾은 multifile의 사이즈가 0이 아니라면(파일이 존재한다면)
-				
-				if(key.contains("-")) { // 새로 추가한 이미지 라면 
+		for (String key : keys) { // Set 순회
+			if (files.get(key).getSize() != 0) { // 키값으로 찾은 multifile의 사이즈가 0이 아니라면(파일이 존재한다면)
+
+				if (key.contains("-")) { // 새로 추가한 이미지 라면
 					ImgRequestDto dto = new ImgRequestDto(); // 객체 생성
-					if(key.contains("detail")) { // 상세 이미지라면
+					if (key.contains("detail")) { // 상세 이미지라면
 						dto.setIsThumbnail(0);
-					}else if(key.contains("thumb")){ // 썸네일 이라면
+					} else if (key.contains("thumb")) { // 썸네일 이라면
 						dto.setIsThumbnail(1);
 					}
 					dto.setFile(files.get(key)); // multifile 추가
 					dto.setProductId(productId); // 상품 아이디 추가
 					insertList.add(dto); // 리스트로 추가
-					
-				}else { // 기존 이미지를 수정한다면 
+
+				} else { // 기존 이미지를 수정한다면
 					ImgRequestDto dto = ImgRequestDto.builder() // 객체 생성
 							.id(key)
 							.file(files.get(key))
@@ -360,28 +358,29 @@ public class AdminService {
 		}
 		// 파일 업로드 기능
 		List<ImgRequestDto> newUpdateList = uploadFile(updateList);
-		
+
 		// 파일 추가 기능
 		List<ImgRequestDto> newInsertList = uploadFile(insertList);
-		
+
 		// DB img(url) 수정 이미지 변경사항이 있다면
-		if(!newUpdateList.isEmpty()) {
-			productImageRepository.updateById(newUpdateList);	
+		if (!newUpdateList.isEmpty()) {
+			productImageRepository.updateById(newUpdateList);
 		}
 		// DB img 추가
-		if(!newInsertList.isEmpty()) {
+		if (!newInsertList.isEmpty()) {
 			productImageRepository.insert(newInsertList);
 		}
 	}
 
 	/**
 	 * 파일 업로드 기능
+	 * 
 	 * @param imgRequestDtosList
 	 * @return 새로운 파일 이름을 담은 list
 	 */
 	@Transactional
 	public List<ImgRequestDto> uploadFile(List<ImgRequestDto> imgRequestDtosList) {
-		for(ImgRequestDto dto : imgRequestDtosList) { // 리스트 순회
+		for (ImgRequestDto dto : imgRequestDtosList) { // 리스트 순회
 			// 파일 가져오기
 			MultipartFile file = dto.getFile(); // list 파일 인스턴스 선언
 			// 중복 파일 이름 방지
@@ -391,7 +390,7 @@ public class AdminService {
 			DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd"); // 시간 포맷 지정
 			String formatedNow = now.format(dateTimeFormatter); // 시간 포맷 변환
 			String newFileName = uuidStr;
-			if(oriFileName != null) {
+			if (oriFileName != null) {
 				int extIndex = oriFileName.indexOf("."); // . 인덱스 가져오기
 				String ext = oriFileName.substring(extIndex); // .확장자 가져오기
 				newFileName += ext; // 시간_UUID.확장자
@@ -399,7 +398,7 @@ public class AdminService {
 			String newDatefolderPath = filePath + formatedNow + File.separator; // 기존 폴더/연월일/
 			// 폴더 확인 없으면 업로드 날짜(yyyyMMdd)로 폴더 생성
 			File folder = new File(newDatefolderPath);
-			if(!folder.exists()) {
+			if (!folder.exists()) {
 				folder.mkdirs();
 			}
 			Path path = Paths.get(newDatefolderPath, newFileName); // 파일 생성(경로 + 파일)
@@ -415,12 +414,13 @@ public class AdminService {
 		}
 		return imgRequestDtosList;
 	}
-	
+
 	// 1차 카테고리로 검색
 	@Transactional
-	public List<SecondCategory> getSecondCategoryListByFirstCategoryId(int firstCategoryId){
+	public List<SecondCategory> getSecondCategoryListByFirstCategoryId(int firstCategoryId) {
 		return secondCategoryRepository.findByFirstCategoryId(firstCategoryId);
 	}
+
 	// 상품 일반 정보 입력
 	@Transactional
 	public void insertProduct(InsertProductRequestDto insertProductRequestDto) {
@@ -430,8 +430,10 @@ public class AdminService {
 		int autoIncreProductId = insertProductRequestDto.getProduct().getId();
 		// 상품 이미지
 		// 썸네일 구분하기
-		List<ImgRequestDto> thumbImgList = insertProductRequestDto.toImgReqDtoList(insertProductRequestDto.getThumbImg(), 1, autoIncreProductId);
-		List<ImgRequestDto> detailImgList = insertProductRequestDto.toImgReqDtoList(insertProductRequestDto.getDetailImg(), 0, autoIncreProductId);
+		List<ImgRequestDto> thumbImgList = insertProductRequestDto
+				.toImgReqDtoList(insertProductRequestDto.getThumbImg(), 1, autoIncreProductId);
+		List<ImgRequestDto> detailImgList = insertProductRequestDto
+				.toImgReqDtoList(insertProductRequestDto.getDetailImg(), 0, autoIncreProductId);
 		// 파일 업로드 하고 바뀐 파일이름 받아오기
 		thumbImgList = uploadFile(thumbImgList);
 		detailImgList = uploadFile(detailImgList);
@@ -442,6 +444,7 @@ public class AdminService {
 		// 상품 이미지 정보 입력
 		productImageRepository.insert(allImgList);
 	}
+
 	// 상품 삭제
 	@Transactional
 	public void deleteProduct(Integer productId) {
@@ -450,24 +453,26 @@ public class AdminService {
 		// 이미지 정보 삭제(productId)
 		productImageRepository.deleteByProductId(productId);
 	}
+
 	@Transactional
 	public int deleteImg(Integer productImageId) {
 		return productImageRepository.deleteById(productImageId);
 	}
-	
+
 	// product end
-	
+
 	// user start
 	@Transactional
-	public AdminPageListDto<UserInfoListDto> userList(String type, String kerword,Integer page, String status) {
-		if(page <= 0) {
+	public AdminPageListDto<UserInfoListDto> userList(String type, String kerword, Integer page, String status) {
+		if (page <= 0) {
 			page = 1;
 		}
 		PagingResponseDto PagingResponseDto = qnaRepository.findPaging(type, kerword, page, status);
-		int startNum = (page-1)*10;
+		int startNum = (page - 1) * 10;
 		List<UserInfoListDto> userList = userRepository.findByKeywordAndCurrentPage(type, kerword, startNum, status);
 		System.out.println(userList.get(0).getBirthday());
-		AdminPageListDto<UserInfoListDto> adminPageListDto = new AdminPageListDto<UserInfoListDto>(PagingResponseDto, kerword, type, null ,userList);
+		AdminPageListDto<UserInfoListDto> adminPageListDto = new AdminPageListDto<UserInfoListDto>(PagingResponseDto,
+				kerword, type, null, userList);
 		return adminPageListDto;
 	}
 
@@ -483,7 +488,6 @@ public class AdminService {
 		personRepository.updateByUserId(personEntity);
 		return result;
 	}
-
 
 	public int deleteUserInfo(int id) {
 		int result = userRepository.deleteById(id);

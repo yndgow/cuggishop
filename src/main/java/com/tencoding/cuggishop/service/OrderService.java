@@ -17,12 +17,10 @@ import com.tencoding.cuggishop.repository.interfaces.OrderProductsRepository;
 import com.tencoding.cuggishop.repository.interfaces.OrderRepository;
 import com.tencoding.cuggishop.repository.interfaces.PaymentRepository;
 import com.tencoding.cuggishop.repository.interfaces.ProductRepository;
-import com.tencoding.cuggishop.repository.model.OfflineStore;
 import com.tencoding.cuggishop.repository.model.Order;
 import com.tencoding.cuggishop.repository.model.OrderProducts;
 import com.tencoding.cuggishop.repository.model.Payment;
 import com.tencoding.cuggishop.repository.model.Product;
-
 
 @Service
 public class OrderService {
@@ -32,44 +30,44 @@ public class OrderService {
 
 	@Autowired
 	OrderProductsRepository orderProductsRepository;
-	
+
 	@Autowired
 	PaymentRepository paymentRepository;
-	
+
 	@Autowired
 	ProductRepository productRepository;
 
 	public List<OrderListResponseDto> readOrderList(int id) {
 		List<OrderListResponseDto> list = orderRepository.findByList(id);
-		
+
 		String selection = "*,";
-		if(list.size() > 0) {
+		if (list.size() > 0) {
 			int i = 0;
-			while(true) {
+			while (true) {
 				int changeCount = 0;
 				int j = 0;
-				while(true) {
-					if(list.get(i).getProductName().charAt(j) == selection.charAt(0)) {
-						changeCount =1;
+				while (true) {
+					if (list.get(i).getProductName().charAt(j) == selection.charAt(0)) {
+						changeCount = 1;
 						System.out.println(changeCount);
 					}
-					if((list.get(i).getProductName().charAt(j) == ',')&&(changeCount ==1)) {
-						String newProductName = ""; 
-						newProductName = list.get(i).getProductName().substring(0, j) + "<br>" + 
-											list.get(i).getProductName().substring(j+1, list.get(i).getProductName().length());
+					if ((list.get(i).getProductName().charAt(j) == ',') && (changeCount == 1)) {
+						String newProductName = "";
+						newProductName = list.get(i).getProductName().substring(0, j) + "<br>" +
+								list.get(i).getProductName().substring(j + 1, list.get(i).getProductName().length());
 						list.get(i).setProductName(newProductName);
-						changeCount=0;
+						changeCount = 0;
 					}
 					j++;
-					if(j>=list.get(i).getProductName().length()) {
+					if (j >= list.get(i).getProductName().length()) {
 						break;
 					}
 				}
 				i++;
-				if(i>=list.size()) {
+				if (i >= list.size()) {
 					break;
 				}
-				
+
 			}
 		}
 		return list;
@@ -78,10 +76,10 @@ public class OrderService {
 	@Transactional
 	public List<OrderDetailProductResponseDto> readOrderDetailList(int orderId) {
 		List<OrderDetailProductResponseDto> detailList = orderProductsRepository.findByDetailList(orderId);
-		
+
 		System.out.println(detailList.get(0).toString());
-		System.out.println("서비스 : " +detailList.toString());
-		
+		System.out.println("서비스 : " + detailList.toString());
+
 		return detailList;
 	}
 
@@ -114,17 +112,15 @@ public class OrderService {
 	public List<OrderBasketResponseDto> readOrderBasketList(int id) {
 		List<OrderBasketResponseDto> basketList = orderRepository.findByBasketList(id);
 		System.out.println(basketList);
-		if(basketList==null) {
+		if (basketList == null) {
 			Order basket = new Order(0, id, null, null, null, null, null, null, 0, 0);
 			orderRepository.insert(basket);
 		}
 		return basketList;
 	}
 
-	
-
 	@Transactional
-	public int insertPayment(InsertPaymentRequestDto insertPaymentRequestDto,int orderId) {
+	public int insertPayment(InsertPaymentRequestDto insertPaymentRequestDto, int orderId) {
 		Payment paymentEntity = insertPaymentRequestDto.toEntity(orderId);
 
 		System.out.println(" 서비스 : " + paymentEntity);
@@ -132,31 +128,32 @@ public class OrderService {
 	}
 
 	public int updateOrder(UpdateOrderListRequestDto updateOrderListRequestDto, int orderId) {
-		
+
 		Order orderEntity = updateOrderListRequestDto.toEntity2(orderId);
 		System.out.println(orderEntity.getState());
 		int result = orderRepository.orderUpdate(orderEntity);
 		return result;
-		
+
 	}
 
 	public void addProductAtBasket(int productId, int userId) {
 		Order orderEntity = orderRepository.findByUserId(userId);
-		if(orderEntity ==null) {
+		if (orderEntity == null) {
 			Order basket = new Order(0, userId, null, null, null, null, null, null, 0, 0);
 			int orderId = orderRepository.insert(basket);
 			orderEntity = orderRepository.findById(orderId);
 		}
-		
+
 		Product product = productRepository.findById(productId);
-		OrderProducts orderProductsEntity = orderProductsRepository.findByOrderIdAndProductId(orderEntity.getId(), productId);
-		if(orderProductsEntity != null) {
+		OrderProducts orderProductsEntity = orderProductsRepository.findByOrderIdAndProductId(orderEntity.getId(),
+				productId);
+		if (orderProductsEntity != null) {
 			throw new CustomRestfulException("이미 등록된 상품입니다.", HttpStatus.BAD_REQUEST);
 		}
 		OrderProducts orderProducts = new OrderProducts(orderEntity.getId(), product);
 		orderProductsRepository.insert(orderProducts);
-	  }
-	
+	}
+
 	public int deleteBasket(int id) {
 		int result = orderRepository.deleteBasket(id);
 		return result;
@@ -164,13 +161,12 @@ public class OrderService {
 
 	public int updateProducts(int orderId) {
 		List<OrderProducts> list = orderProductsRepository.findByOrderId(orderId);
-		int result =0;
-		for(int i=0; i<list.size(); i++) {
+		int result = 0;
+		for (int i = 0; i < list.size(); i++) {
 			result = orderProductsRepository.updateByOrderId(list.get(i));
 		}
-		
+
 		return result;
 	}
-	
 
 }

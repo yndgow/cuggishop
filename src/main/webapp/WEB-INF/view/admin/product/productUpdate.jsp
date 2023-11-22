@@ -206,7 +206,7 @@
 	        </td>
 	      </tr>
 	      <tr>
-	        <td>상품 세부 이미지<br><button type="button" class="btn btn-dark btnAddImg">추가</button></td>
+	        <td>세부 이미지<br><button type="button" class="btn btn-dark btnAddImg">추가</button></td>
 	        <td class="tableImgTd d-flex" id="detailImglTd">
 	          <c:forEach var="product" items="${adminProductList}" varStatus="status">
 	          	<c:if test="${product.isThumbnail == 0}">
