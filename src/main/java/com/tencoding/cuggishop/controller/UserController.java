@@ -2,8 +2,6 @@ package com.tencoding.cuggishop.controller;
 
 import org.springframework.http.HttpHeaders;
 
-import java.util.Random;
-
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -31,9 +29,7 @@ import com.tencoding.cuggishop.dto.request.SignInDto;
 import com.tencoding.cuggishop.dto.request.SignUpDto;
 import com.tencoding.cuggishop.dto.request.UpdateUserDto;
 import com.tencoding.cuggishop.handler.exception.CustomRestfulException;
-import com.tencoding.cuggishop.repository.model.Person;
 import com.tencoding.cuggishop.repository.model.User;
-import com.tencoding.cuggishop.service.PersonService;
 import com.tencoding.cuggishop.service.UserService;
 import com.tencoding.cuggishop.util.Define;
 
@@ -46,17 +42,17 @@ public class UserController {
 
 	@Autowired
 	private HttpSession session;
-	
+
 	@GetMapping("/signUp")
 	public String signUp() {
 		return "user/signUp";
 	}
-	
+
 	@GetMapping("signIn")
 	public String signIn() {
 		return "user/signIn";
 	}
-	
+
 	@PostMapping("/signUp")
 	public String signUpProc(SignUpDto signUpDto) {
 		if (signUpDto.getUsername() == null || signUpDto.getUsername().isEmpty()) {
@@ -87,7 +83,7 @@ public class UserController {
 		userService.signUp(signUpDto);
 		return "redirect:/user/signIn";
 	}
-	
+
 	@PostMapping("/signIn")
 	public String signInProc(SignInDto signInDto) {
 
@@ -97,78 +93,78 @@ public class UserController {
 		if (signInDto.getPassword() == null || signInDto.getPassword().isEmpty()) {
 			throw new CustomRestfulException("비밀번호를 입력하세요", HttpStatus.BAD_REQUEST);
 		}
-		
+
 		User principal = userService.signIn(signInDto);
 		principal.setPassword(null);
 		session.setAttribute(Define.PRINCIPAL, principal);
-		
+
 		return "redirect:/";
 	}
-	
+
 	@GetMapping("/logout")
 	public String logout() {
 		session.invalidate();
 		return "redirect:/user/signIn";
 	}
-	
+
 	@GetMapping("/kakao/callback")
 	public String kakaoCallback(@RequestParam String code, Model model) {
 		System.out.println("메서드 동작");
-		
+
 		RestTemplate rt = new RestTemplate();
-		
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
 		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 		params.add("grant_type", "authorization_code");
 		params.add("client_id", "01b88ff29390c24b3527959d05fbc8ae");
-		params.add("redirect_uri", "http://192.168.0.65:90/user/kakao/callback");
+		params.add("redirect_uri", "http://localhost:90/user/kakao/callback");
 		params.add("code", code);
-		
-		HttpEntity<MultiValueMap<String, String>> reqMes = 
-				new HttpEntity<>(params, headers);
-		
-		ResponseEntity<OAuthToken> response = rt.exchange("https://kauth.kakao.com/oauth/token", HttpMethod.POST, reqMes, OAuthToken.class);
+
+		HttpEntity<MultiValueMap<String, String>> reqMes = new HttpEntity<>(params, headers);
+
+		ResponseEntity<OAuthToken> response = rt.exchange("https://kauth.kakao.com/oauth/token", HttpMethod.POST,
+				reqMes, OAuthToken.class);
 		System.out.println("액세스 토큰 확인" + response.getBody().toString());
-		
+
 		RestTemplate ret2 = new RestTemplate();
-		
+
 		HttpHeaders headers2 = new HttpHeaders();
 		headers2.add("Authorization", "Bearer " + response.getBody().getAccessToken());
 		headers2.add("Content-type", "Content-type: application/x-www-form-urlencoded;charset=utf-8");
 		HttpEntity<MultiValueMap<String, String>> kakaoInfo = new HttpEntity<>(headers2);
-		
-		ResponseEntity<KakaoProfile> response2 = ret2.exchange
-				("https://kapi.kakao.com/v2/user/me", HttpMethod.POST, kakaoInfo, KakaoProfile.class);
+
+		ResponseEntity<KakaoProfile> response2 = ret2.exchange("https://kapi.kakao.com/v2/user/me", HttpMethod.POST,
+				kakaoInfo, KakaoProfile.class);
 		System.out.println("------------------------------------------------");
 		System.out.println(response2.getBody().getKakaoAccount().getEmail());
-		
+
 		System.out.println("-------카카오 서버에 정보 받기 완료-------");
-		
+
 		KakaoProfile kakaoProfile = response2.getBody();
-		
+
 		SignUpDto signUpDto = SignUpDto
 				.builder()
-				.username(kakaoProfile.getKakaoAccount().getEmail()+"_"+kakaoProfile.getId()+"_kakao")
+				.username(kakaoProfile.getKakaoAccount().getEmail() + "_" + kakaoProfile.getId() + "_kakao")
 				.password("tencoKey")
 				.build();
 
 		User oldUser = userService.searchUsername(signUpDto.getUsername());
 		if (oldUser == null) {
-//			userService.signUp(signUpDto);
-//			oldUser.setUsername(signUpDto.getUsername());
+			// userService.signUp(signUpDto);
+			// oldUser.setUsername(signUpDto.getUsername());
 			model.addAttribute("signUpDto", signUpDto);
 			return "/user/signUp";
 		}
 		oldUser.setPassword(null);
 		session.setAttribute(Define.PRINCIPAL, oldUser);
-		
-		//session.setAttribute(Define.PRINCIPAL, oldUser);
+
+		// session.setAttribute(Define.PRINCIPAL, oldUser);
 		return "redirect:/";
-		
+
 	}
-	
+
 	@GetMapping("/updateForm")
 	public String updateForm(Model model) {
 		User user = (User) session.getAttribute(Define.PRINCIPAL);
@@ -182,7 +178,7 @@ public class UserController {
 		}
 		return "user/updateForm";
 	}
-	
+
 	@PostMapping("/updateUser")
 	public String updateUser(UpdateUserDto updateUserDto) {
 		if (updateUserDto.getUsername() == null || updateUserDto.getUsername().isEmpty()) {
@@ -206,28 +202,27 @@ public class UserController {
 		userService.updateUserForm(updateUserDto);
 		return "redirect:/user/updateForm";
 	}
-	
+
 	@PostMapping("/delete")
 	public String deleteUser(DeleteUserDto deleteUserDto) {
-		
+
 		User user = (User) session.getAttribute(Define.PRINCIPAL);
-		
+
 		if (!user.getUsername().contains("_kakao")) {
 			if (deleteUserDto.getPassword() == null || deleteUserDto.getPassword().isEmpty()) {
 				throw new CustomRestfulException("비밀번호를 입력하세요", HttpStatus.BAD_REQUEST);
 			} else {
 				userService.deleteUser(deleteUserDto, user);
-			}			
-		}
-		else {
+			}
+		} else {
 			userService.deleteUser(deleteUserDto, user);
-		}		
+		}
 		return "redirect:/user/logout";
 	}
-	
+
 	@GetMapping("/delete")
 	public String deleteForm(Model model) {
-		
+
 		// 1. 세션에 접근 - kakao 확인
 		User user = (User) session.getAttribute(Define.PRINCIPAL);
 		// 속성 --JSP isKakaoUser
@@ -239,58 +234,54 @@ public class UserController {
 		}
 		return "/user/delete";
 	}
-	
+
 	@GetMapping("/findId")
 	public String findUsername() {
 
 		return "/user/findId";
 	}
-	
-	
-	@PostMapping("/findId")
+
+	@PostMapping("/showId")
 	public String findId(String email, Model model) {
-		
-		if (email == null) {
-			throw new CustomRestfulException("이메일을 입력하세요", HttpStatus.BAD_REQUEST);
-		}
-		
+
 		String username = userService.findId(email);
 		model.addAttribute("username", username);
-		
+
 		if (username.contains("_kakao")) {
 			model.addAttribute("iskakaoUser", true);
 		} else {
 			model.addAttribute("iskakaoUser", false);
 		}
-		
+
 		return "/user/showId";
 	}
-	
+
 	@GetMapping("/findPassword")
 	public String findUserPassword() {
-		
+
 		return "/user/findPassword";
 	}
-	
+
 	@PostMapping("/showPassword")
 	public String findPassword(FindPasswordDto findPasswordDto, Model model) {
-		
+
 		String newPwd = RandomStringUtils.randomAlphanumeric(10);
 		userService.findPassword(findPasswordDto.getUsername(), findPasswordDto.getEmail(), newPwd);
 		model.addAttribute("newPassword", newPwd);
-		
+
 		return "/user/showPassword";
 	}
-	
+
 	@GetMapping("/duplicateCheck")
 	@ResponseBody
-	public int duplicateCheck(@RequestParam(required = false) String email, @RequestParam(required = false) String username) {
+	public int duplicateCheck(@RequestParam(required = false) String email,
+			@RequestParam(required = false) String username) {
 
-		if((email == null && username==null)) {
+		if ((email == null && username == null)) {
 			throw new CustomRestfulException("값을 입력해주세요.", HttpStatus.BAD_REQUEST);
 		}
 		int result = userService.duplicateCheck(email, username);
 		return result;
 	}
-	
+
 }

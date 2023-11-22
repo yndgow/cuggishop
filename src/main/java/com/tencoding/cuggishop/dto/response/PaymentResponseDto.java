@@ -2,7 +2,6 @@ package com.tencoding.cuggishop.dto.response;
 
 import java.sql.Timestamp;
 
-import com.tencoding.cuggishop.repository.model.Order;
 import com.tencoding.cuggishop.repository.model.Payment;
 
 import lombok.AllArgsConstructor;
@@ -17,16 +16,14 @@ public class PaymentResponseDto {
 	String tid;
 	int order_id;
 	Timestamp created_at;
-	
+
 	public static PaymentResponseDto fromEntity(Payment payment) {
 		return new PaymentResponseDto(
 				payment.getId(),
 				payment.getTid(),
 				payment.getOrderId(),
-				payment.getCreatedAt()				
-				);	
-	
+				payment.getCreatedAt());
+
 	}
-	
 
 }

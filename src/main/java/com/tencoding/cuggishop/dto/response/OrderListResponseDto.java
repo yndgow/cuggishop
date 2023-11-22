@@ -2,7 +2,6 @@ package com.tencoding.cuggishop.dto.response;
 
 import java.sql.Timestamp;
 
-import com.tencoding.cuggishop.repository.model.OfflineStore;
 import com.tencoding.cuggishop.repository.model.Order;
 
 import lombok.AllArgsConstructor;
@@ -18,28 +17,26 @@ public class OrderListResponseDto {
 	String productName;
 	int price;
 	int id;
-	int userId;	
+	int userId;
 	Timestamp purchaseDate;
 	Timestamp cancelDate;
 	Timestamp createdAt;
 	String name;
 	String state;
-  
-	public static OrderListResponseDto fromEntity(Order order){
-		System.out.println(order.getPrice());
+
+	public static OrderListResponseDto fromEntity(Order order) {
+
 		return new OrderListResponseDto(
 				order.getImage(),
 				order.getProductName(),
-				order.getPrice(),			
-				order.getId(), 
-				order.getUserId(), 
-				order.getPurchaseDate(), 
-				order.getCancelDate(), 
-				order.getCreatedAt(), 
-                "",
-				order.getState()
-				);
+				order.getPrice(),
+				order.getId(),
+				order.getUserId(),
+				order.getPurchaseDate(),
+				order.getCancelDate(),
+				order.getCreatedAt(),
+				"",
+				order.getState());
 	}
-
 
 }

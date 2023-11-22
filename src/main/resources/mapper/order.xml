@@ -201,7 +201,7 @@
 		<if test="status != ''">
 			AND state like CONCAT('%',#{status},'%')
 		</if>
-		group by o.id
+		<!-- group by o.id -->
 		ORDER BY id DESC
 		LIMIT #{startNum}, 10
 	</select>

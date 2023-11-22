@@ -3,7 +3,7 @@
 <%@ include file="/WEB-INF/view/layout/header.jsp"%>
 	<main>
 	<div id="body">
-		<div id="title">나의 cuggishop 계정</div>
+		<div id="title">나의 CUGGI 계정</div>
 		<div id="subTitle">로그인</div>
 		<form action="/user/signIn" method="post" autocomplete="off">
 			<div id="login">
@@ -18,7 +18,7 @@
 			</div>
 			<br>
 			<div>
-				<a href="https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=01b88ff29390c24b3527959d05fbc8ae&redirect_uri=http://192.168.0.65:90/user/kakao/callback">
+				<a href="https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=01b88ff29390c24b3527959d05fbc8ae&redirect_uri=http://localhost:90/user/kakao/callback">
 				<img src="/image/kakao_login_large_wide.png" width="400px" alt=""></a>
 			</div>
 		</form>
